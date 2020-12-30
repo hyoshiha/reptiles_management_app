@@ -8,6 +8,7 @@ target 'management_app' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  
   target 'management_appTests' do
     inherit! :complete
     # Pods for testing
@@ -25,6 +26,7 @@ end
 
 target 'management_app-tvOS' do
   # Pods for management_app-tvOS
+  pod 'GoogleSignIn', '~> 5.0.2'
 
   target 'management_app-tvOSTests' do
     inherit! :search_paths
