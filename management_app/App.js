@@ -6,109 +6,119 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import {
-  SafeAreaView,
+import * as React from 'react';
+import { 
+  Platform,
   StyleSheet,
-  ScrollView,
   View,
   Text,
-  StatusBar,
+  FlatList,
+  Button,
 } from 'react-native';
-
 import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  Container,
+  Content,
+  Title,
+} from 'native-base';
+import Signin from './src/component/signin';
+import { GoogleSignin } from '@react-native-community/google-signin';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-const App: () => React$Node = () => {
+// 各画面用のファイルをimport
+import Dashboard from './src/component/dashboard';
+import InputDetails from './src/component/inputdetails';
+import AppInfo from './src/component/appinfo';
+
+const Stack = createStackNavigator();
+
+// Home画面だけうまく外出しできないので残す
+function HomeScreen() {
+  const {navigate} = useNavigation();
+
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Home Screen</Text>
+      <Signin />
+      <Content>
+        <Text>ここからは遷移テスト</Text>
+        <Container>
+          <Button
+            title='ダッシュボードへ移動'
+            onPress = {()=> navigate('Dashboard')}
+          />
+          <Button
+            title='入力へ移動'
+            onPress = {()=> navigate('InputDetails')}
+          />
+          <Button
+            title='お知らせへ移動'
+            onPress = {()=> navigate('AppInfo')}
+          />
+        </Container>
+      </Content>
+    </View>
   );
-};
+}
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
+function Settings() {
+  return (
+    <View>
+      <Text>Setting</Text>
+    </View>
+  )
+}
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen 
+          name="HomeScreen"
+          component={HomeScreen}
+          options = {{title: 'ログイン', headerLeft: ()=> 
+            (
+              <Button
+                onPress={() => alert('This is a button!')}
+                title='menu test'
+              />
+            )
+          }}
+        />
+        <Stack.Screen
+          name="Dashboard"
+          component={Dashboard}
+          options = {{
+            title: ''
+          }}
+        />
+        <Stack.Screen
+          name="InputDetails"
+          component={InputDetails}
+          options ={{
+            title: '管理記録を入力'
+          }}
+        />
+        <Stack.Screen
+          name="AppInfo"
+          component={AppInfo}
+          options ={{
+            title: 'お知らせ',
+            /*
+            headerLeft: ()=> 
+            (
+              <Button
+                onPress={() => alert('戻るを実装したい')}
+                title='戻る'
+              />
+            )
+            */
+          }}
+        />
+        <Stack.Screen name="Settings" component={Settings} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 export default App;
