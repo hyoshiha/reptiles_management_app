@@ -60,3 +60,5 @@ buck-out/
 
 # config of firebase
 src/config/*
+ios/GoogleService-Info.plist
+ios/management_app/Info.plist

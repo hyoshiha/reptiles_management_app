@@ -14,6 +14,7 @@ import {
   Text,
   FlatList,
   Button,
+  AppRegistry,
 } from 'react-native';
 import {
   Container,
