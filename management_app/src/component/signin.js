@@ -1,25 +1,28 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
     GoogleSignin,
     GoogleSigninButton,
     statusCodes,
 } from '@react-native-community/google-signin';
+import { useNavigation } from '@react-navigation/native';
 import '../config/firebase';
 
-GoogleSignin.configure();
+class Signin extends Component {
+    constructor(props){
+      super(props);
+    }
 
-const Signin = () => {
-    console.log(this);
+    async _signIn() {
+        state = {
+          userInfo: {},
+        }
+        let userInfo;
 
-    const _signIn = async() => {
         try {
             await GoogleSignin.hasPlayServices();
-            const userInfo = await GoogleSignin.signIn();
-            this.setState({ userInfo })
-            return (
-                <Text> login success !!! </Text>
-    
-            );
+            userInfo = await GoogleSignin.signIn();
+            this.setState({ userInfo: userInfo });
+            this.props.onLoadFn();
           } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
               // user cancelled the login flow
@@ -29,17 +32,21 @@ const Signin = () => {
               // play services not available or outdated
             } else {
               // some other error happened
+              console.log("else ? ");
+              console.log(error);
             }
           }
     };
 
-    return (
-        <GoogleSigninButton
-            style={{ width: 192, height: 48 }}
-            size={GoogleSigninButton.Size.Wide}
-            color={GoogleSigninButton.Color.Dark}
-            onPress={()=>_signIn()} />
-    );
+    render() {
+      return (
+          <GoogleSigninButton
+              style={{ width: 192, height: 48 }}
+              size={GoogleSigninButton.Size.Wide}
+              color={GoogleSigninButton.Color.Dark}
+              onPress={()=>this._signIn()} />
+      );
+    }
 }
 
 export default Signin;

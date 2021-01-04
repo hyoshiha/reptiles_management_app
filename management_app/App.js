@@ -6,7 +6,8 @@
  * @flow strict-local
  */
 
-import * as React from 'react';
+/*import * as React from 'react';*/
+import React, {Component} from 'react';
 import { 
   Platform,
   StyleSheet,
@@ -32,15 +33,27 @@ import InputDetails from './src/component/inputdetails';
 import AppInfo from './src/component/appinfo';
 
 const Stack = createStackNavigator();
+GoogleSignin.configure();
 
-// Home画面だけうまく外出しできないので残す
+// Loading画面, Home画面だけうまく外出しできないので残す
+
+function Loading(){
+  return (
+    <View>
+      <Signin 
+        onLoadFn={()=> navigate('Dashboard')}
+      />
+    </View>
+  )
+}
 function HomeScreen() {
-  const {navigate} = useNavigation();
-
+  const {navigate} = useNavigation();  
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Home Screen</Text>
-      <Signin />
+      <Signin 
+        onLoadFn={()=> navigate('Dashboard')}
+      />
       <Content>
         <Text>ここからは遷移テスト</Text>
         <Container>
@@ -70,56 +83,60 @@ function Settings() {
   )
 }
 
-function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen 
-          name="HomeScreen"
-          component={HomeScreen}
-          options = {{title: 'ログイン', headerLeft: ()=> 
-            (
-              <Button
-                onPress={() => alert('This is a button!')}
-                title='menu test'
-              />
-            )
-          }}
-        />
-        <Stack.Screen
-          name="Dashboard"
-          component={Dashboard}
-          options = {{
-            title: ''
-          }}
-        />
-        <Stack.Screen
-          name="InputDetails"
-          component={InputDetails}
-          options ={{
-            title: '管理記録を入力'
-          }}
-        />
-        <Stack.Screen
-          name="AppInfo"
-          component={AppInfo}
-          options ={{
-            title: 'お知らせ',
-            /*
-            headerLeft: ()=> 
-            (
-              <Button
-                onPress={() => alert('戻るを実装したい')}
-                title='戻る'
-              />
-            )
-            */
-          }}
-        />
-        <Stack.Screen name="Settings" component={Settings} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+class App extends Component {
+  // check Login Status
+
+  render() {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen 
+            name="HomeScreen"
+            component={HomeScreen}
+            options = {{title: 'ログイン', headerLeft: ()=> 
+              (
+                <Button
+                  onPress={() => alert('This is a button!')}
+                  title='menu test'
+                />
+              )
+            }}
+          />
+          <Stack.Screen
+            name="Dashboard"
+            component={Dashboard}
+            options = {{
+              title: ''
+            }}
+          />
+          <Stack.Screen
+            name="InputDetails"
+            component={InputDetails}
+            options ={{
+              title: '管理記録を入力'
+            }}
+          />
+          <Stack.Screen
+            name="AppInfo"
+            component={AppInfo}
+            options ={{
+              title: 'お知らせ',
+              /*
+              headerLeft: ()=> 
+              (
+                <Button
+                  onPress={() => alert('戻るを実装したい')}
+                  title='戻る'
+                />
+              )
+              */
+            }}
+          />
+          <Stack.Screen name="Settings" component={Settings} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
 }
 
 export default App;
